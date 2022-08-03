@@ -28,10 +28,8 @@ class ArticleItem extends GetView<HomeController> {
     var contents = item.media?.contents;
     late String? image = "";
 
-    if (contents != null) {
-      if (contents.isNotEmpty) {
-        image = contents[0].url;
-      }
+    if (contents != null && contents.isNotEmpty) {
+      image = contents[0].url;
     }
 
     return GetBuilder(
@@ -42,20 +40,20 @@ class ArticleItem extends GetView<HomeController> {
           onTap: () => onTap(index, item),
           onLongPress: () => handleOnLongPress(index, item),
           child: Card(
-            child: Column(
+            child: Stack(
               children: [
-                if (controller.hasHighEmphasis(item))
-                  const SizedBox(
-                    width: double.infinity,
-                    height: 16.0,
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: AppTheme.pink,
-                      ),
-                    ),
-                  ),
-                Stack(
+                Column(
                   children: [
+                    if (controller.hasHighEmphasis(item))
+                      const SizedBox(
+                        width: double.infinity,
+                        height: 16.0,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: AppTheme.pink,
+                          ),
+                        ),
+                      ),
                     if (image != "")
                       GestureDetector(
                         onDoubleTap: () => interactiveImageView(image),
@@ -86,57 +84,57 @@ class ArticleItem extends GetView<HomeController> {
                           ),
                         ),
                       ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: Transform.translate(
-                        offset: const Offset(12.0, -16.0),
-                        child: IconButton(
-                          iconSize: 16.0,
-                          onPressed: () => {
-                            controller.newsService.toggleReadArticle(item),
-                            controller.updateArticleList(),
-                            controller.update()
-                          },
-                          icon: Icon(
-                            hasRead ? Icons.remove_red_eye : Icons.remove_red_eye_outlined,
-                            color: hasRead ? Colors.white : Colors.white54,
-                            shadows: const [
-                              Shadow(
-                                color: Colors.black26,
-                                blurRadius: 3.0,
-                                offset: Offset(0.5, 0.25),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (item.title != null)
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: Text(
+                                item.title ?? '',
+                                style: TextStyle(
+                                  fontSize: controller.newsService.settings.displayCompactList ? 18 : 20,
+                                ),
                               ),
-                            ],
-                          ),
-                        ),
+                            ),
+                          if (item.description != null && !controller.newsService.settings.displayCompactList)
+                            Text(
+                              item.description ?? '',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: context.theme.textTheme.caption?.color,
+                              ),
+                            ),
+                        ],
                       ),
                     ),
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (item.title != null)
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: Text(
-                            item.title ?? '',
-                            style: TextStyle(
-                              fontSize: controller.newsService.settings.displayCompactList ? 18 : 20,
-                            ),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Transform.translate(
+                    offset: const Offset(12.0, -16.0),
+                    child: IconButton(
+                      iconSize: 16.0,
+                      onPressed: () => {
+                        controller.newsService.toggleReadArticle(item),
+                        controller.updateArticleList(),
+                        controller.update()
+                      },
+                      icon: Icon(
+                        hasRead ? Icons.remove_red_eye : Icons.remove_red_eye_outlined,
+                        color: hasRead ? Colors.white : Colors.white54,
+                        shadows: const [
+                          Shadow(
+                            color: Colors.black26,
+                            blurRadius: 3.0,
+                            offset: Offset(0.5, 0.25),
                           ),
-                        ),
-                      if (item.description != null && !controller.newsService.settings.displayCompactList)
-                        Text(
-                          item.description ?? '',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: context.theme.textTheme.caption?.color,
-                          ),
-                        ),
-                    ],
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ],

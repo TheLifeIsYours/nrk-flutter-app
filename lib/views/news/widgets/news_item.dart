@@ -25,11 +25,7 @@ class NewsItemState extends State<NewsItem> with AutomaticKeepAliveClientMixin {
 
   void setKeepAlive(int currentIndex) {
     setState(() {
-      if ((widget.index - currentIndex).abs() < 5) {
-        keepAlive = true;
-      } else {
-        keepAlive = false;
-      }
+      keepAlive = (widget.index - currentIndex).abs() < 5 ? true : false;
 
       updateKeepAlive();
     });
@@ -37,9 +33,7 @@ class NewsItemState extends State<NewsItem> with AutomaticKeepAliveClientMixin {
 
   late WebViewController? webViewController;
 
-  Future<void> reloadWebView() {
-    return webViewController!.reload();
-  }
+  Future<void> reloadWebView() => webViewController!.reload();
 
   @override
   Widget build(BuildContext context) {
@@ -51,13 +45,14 @@ class NewsItemState extends State<NewsItem> with AutomaticKeepAliveClientMixin {
       children: [
         Expanded(
           child: WebView(
+            javascriptMode: JavascriptMode.unrestricted,
             onWebViewCreated: (controller) {
               webViewController = controller;
             },
             initialUrl: widget.item.link,
-            gestureRecognizers: Set()
-              ..add(Factory<VerticalDragGestureRecognizer>(() => VerticalDragGestureRecognizer())),
-            javascriptMode: JavascriptMode.unrestricted,
+            gestureRecognizers: <Factory<VerticalDragGestureRecognizer>>{
+              Factory<VerticalDragGestureRecognizer>(() => VerticalDragGestureRecognizer())
+            },
           ),
         ),
       ],
