@@ -30,9 +30,6 @@ class CustomButtonThemes {
         borderRadius: BorderRadius.circular(4.0),
       ),
     ),
-    backgroundColor: MaterialStateProperty.all(
-      Get.context?.theme.colorScheme.primary,
-    ),
     padding: MaterialStateProperty.all(EdgeInsets.zero),
     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
     minimumSize: MaterialStateProperty.all(const Size.square(12.0)),

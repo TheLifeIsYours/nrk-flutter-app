@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:nrk/app_routes.dart';
 import 'package:nrk/services/news_service.dart';
 import 'package:nrk/views/news/widgets/news_item.dart';
+import 'package:webfeed/webfeed.dart';
 
 class NewsController extends GetxController {
   NewsService newsService = Get.find();
@@ -24,8 +25,10 @@ class NewsController extends GetxController {
 
   @override
   void onReady() {
-    var index = newsService.currentArticleIndex;
+    super.onReady();
+    setWebViewItems();
 
+    var index = newsService.articles.indexWhere((article) => article.link == newsService.currentArticleUrl);
     pageController.jumpToPage(index);
     newsService.addReadArticle(newsService.articles[index]);
   }
@@ -46,21 +49,36 @@ class NewsController extends GetxController {
   }
 
   void setWebViewItems() {
-    webViews = newsService.articles.map((item) {
-      return NewsItem(
-        item: item,
-        index: newsService.articles.indexOf(item),
-        builder: (BuildContext context, void Function(int index) setKeepAlive) {
-          upadteKeepAlive = setKeepAlive;
-        },
-      );
-    }).toList();
+    if (newsService.settings.hideReadArticles.value) {
+      webViews = newsService.articles
+          .where((item) => !newsService.hasReadArticle(item))
+          .map((item) => NewsItem(
+                item: item,
+                index: newsService.articles.indexOf(item),
+                builder: (BuildContext context, void Function(int index) setKeepAlive) {
+                  upadteKeepAlive = setKeepAlive;
+                },
+              ))
+          .toList();
+    } else {
+      webViews = newsService.articles
+          .map((item) => NewsItem(
+                item: item,
+                index: newsService.articles.indexOf(item),
+                builder: (BuildContext context, void Function(int index) setKeepAlive) {
+                  upadteKeepAlive = setKeepAlive;
+                },
+              ))
+          .toList();
+    }
 
     update();
   }
 
   void onPageChanged(int index) {
-    newsService.addReadArticle(newsService.articles[index]);
+    newsService.hasReadArticle(newsService.articles[index])
+        ? null
+        : newsService.addReadArticle(newsService.articles[index]);
 
     upadteKeepAlive.call(index);
     newsService.currentArticleIndex = index;

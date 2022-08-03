@@ -1,13 +1,10 @@
 import 'dart:async';
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:dual_screen/dual_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:nrk/api/nrk/nrk_feed.dart';
-import 'package:nrk/app_theme.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:webfeed/webfeed.dart';
 import 'package:nrk/api/nrk/nrk_api.dart';
@@ -15,6 +12,7 @@ import 'package:nrk/services/news_service.dart';
 
 class HomeController extends GetxController with GetSingleTickerProviderStateMixin {
   NewsService newsService = Get.find();
+
   List<RssItem> newsItems = [];
   bool isLoading = true;
 
@@ -22,14 +20,13 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
   final scrollController = ScrollController();
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  bool displayFloatingActionButton = false;
 
   //Foldable phone states
   bool hasHinge = true;
   bool previusFoldedOpen = true;
   bool isFoldedOpen = true;
 
-  late final Timer autoUpdateArticlesTimer;
+  Timer? autoUpdateArticlesTimer;
 
   late final AnimationController animationController = AnimationController(
     duration: const Duration(seconds: 1),
@@ -51,13 +48,27 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
       initDualScreen();
     }
 
+    newsService.settings.hideReadArticles.listen((_) {
+      updateArticleList();
+    });
+
     initAutoUpdate();
+  }
+
+  void updateArticleList() {
+    if (newsService.settings.hideReadArticles.value) {
+      newsItems = newsService.articles.where((item) => !newsService.hasReadArticle(item)).toList();
+    } else {
+      newsItems = newsService.articles;
+    }
+
+    update();
   }
 
   @override
   void onClose() {
     super.onClose();
-    autoUpdateArticlesTimer.cancel();
+    autoUpdateArticlesTimer?.cancel();
   }
 
   void initDualScreen() {
@@ -71,13 +82,17 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     });
   }
 
+  void openDrawer() {
+    scaffoldKey.currentState?.openDrawer();
+  }
+
   void initAutoUpdate() {
     startAutoUpdateTimer();
 
     //Listen for new articles when autoUpdateArticles is false
     newsService.settings.autoUpdateArticles.obs.listen((autoUpdateArticles) {
       if (!autoUpdateArticles) {
-        autoUpdateArticlesTimer.cancel();
+        autoUpdateArticlesTimer?.cancel();
       } else {
         startAutoUpdateTimer();
       }
@@ -91,13 +106,12 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     });
   }
 
-  void openDrawer() {
-    scaffoldKey.currentState?.openDrawer();
-  }
-
   void startAutoUpdateTimer() {
     if (newsService.settings.autoUpdateArticles) {
-      autoUpdateArticlesTimer.cancel();
+      if (autoUpdateArticlesTimer != null) {
+        autoUpdateArticlesTimer?.cancel();
+      }
+
       autoUpdateArticlesTimer = Timer.periodic(
         Duration(
           seconds: newsService.settings.autoUpdateArticlesIntervalSeconds,
@@ -144,9 +158,9 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
 
     try {
       rssFeed = await NRKAPI.getNrkFeed(newsService.settings.feed);
-      newsItems = rssFeed.items ?? [];
-      newsService.articles = newsItems;
+      newsService.articles = rssFeed.items ?? [];
       newsService.hasNewArticles = false;
+      updateArticleList();
     } catch (e) {
       Get.snackbar(
         'Feil',
@@ -210,6 +224,7 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
       arguments: {'articleUrl': item.link},
     )?.then((_) {
       scrollToCurrentArticleIndex();
+      newsService.settings.hideReadArticles.value ? updateArticleList() : null;
       update();
     });
   }

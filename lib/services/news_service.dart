@@ -1,5 +1,4 @@
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/route_manager.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:nrk/app_theme.dart';
 import 'package:nrk/services/settings.dart';
@@ -32,6 +31,15 @@ class NewsService extends GetxService {
 
   void addReadArticle(RssItem item) {
     settings.readArticles.add(item.guid!);
+    saveSettings();
+  }
+
+  void toggleReadArticle(RssItem item) {
+    if (hasReadArticle(item)) {
+      settings.readArticles.remove(item.guid);
+    } else {
+      settings.readArticles.add(item.guid!);
+    }
     saveSettings();
   }
 

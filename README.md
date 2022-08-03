@@ -1,16 +1,16 @@
-# nrk
+# NRK
 
-A new Flutter project.
+A NRK Flutter project.
 
-## Getting Started
+## About
+This project is made for fun, and because I wanted a simpler way to navigate through articles.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Features
+* Doubletap to view images closer.
+* Swipe between articles when in view.
+* Hide already read articles.
+  articles when read will be marked with an icon in the upper right corner of articles on front page.
+  * changable in settings.
+* Light and Dark theme.
+  * changble in settings.
+* 

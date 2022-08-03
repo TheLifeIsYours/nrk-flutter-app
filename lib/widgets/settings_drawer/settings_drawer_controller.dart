@@ -20,7 +20,7 @@ class SettingsDrawerController extends GetxController {
   }
 
   void toggleHideReadArticles(bool value) {
-    newsService.settings.hideReadArticles = value;
+    newsService.settings.hideReadArticles.value = value;
     newsService.saveSettings();
     homeController.update();
     update();

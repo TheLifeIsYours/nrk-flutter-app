@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nrk/app_routes.dart';
 
 class SplashController extends GetxController {
-  final switchDuration = 1500;
+  final switchDurationMillis = 1500;
+  final navigationDurationSeconds = kDebugMode ? 0 : 6;
 
   late Timer navigationTimer;
   late Timer switchTimer;
@@ -20,12 +22,12 @@ class SplashController extends GetxController {
 
     await initImageAssets();
 
-    switchTimer = Timer.periodic(Duration(milliseconds: switchDuration), (timer) {
+    switchTimer = Timer.periodic(Duration(milliseconds: switchDurationMillis), (timer) {
       imageIndex = (imageIndex + 1) % images.length;
       update();
     });
 
-    navigationTimer = Timer(const Duration(seconds: 6), () {
+    navigationTimer = Timer(Duration(seconds: navigationDurationSeconds), () {
       Get.offAndToNamed(AppRoutes.home);
     });
   }

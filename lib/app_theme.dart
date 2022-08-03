@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:nrk/themes/custom_button_theme.dart';
 
 class AppTheme {
@@ -14,6 +15,9 @@ class AppTheme {
   static const yellow = Color(0xFFFFD41A);
 
   static ThemeData light = ThemeData(
+    appBarTheme: const AppBarTheme(
+      systemOverlayStyle: SystemUiOverlayStyle.light,
+    ),
     colorScheme: const ColorScheme(
       primary: blue,
       secondary: purple,
@@ -23,7 +27,7 @@ class AppTheme {
       onPrimary: Colors.white,
       onSecondary: Colors.black,
       onSurface: Colors.black,
-      onBackground: Colors.black,
+      onBackground: blue,
       onError: Colors.white,
       brightness: Brightness.light,
     ),
@@ -31,6 +35,10 @@ class AppTheme {
   );
 
   static ThemeData dark = ThemeData(
+    appBarTheme: const AppBarTheme(
+      systemOverlayStyle: SystemUiOverlayStyle.light,
+      elevation: 0,
+    ),
     colorScheme: const ColorScheme(
       primary: purple,
       secondary: blue,
@@ -40,7 +48,7 @@ class AppTheme {
       onPrimary: Colors.white,
       onSecondary: Colors.black,
       onSurface: Colors.white,
-      onBackground: Colors.white,
+      onBackground: purple,
       onError: pink,
       brightness: Brightness.dark,
     ),

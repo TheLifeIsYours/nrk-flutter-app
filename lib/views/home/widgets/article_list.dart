@@ -22,18 +22,13 @@ class ArticleList extends GetView<HomeController> {
                       child: StaggeredGrid.count(
                         crossAxisCount: 2,
                         children: controller.newsItems.map((item) {
-                          return Visibility(
-                            visible: !controller.newsService.settings.hideReadArticles ||
-                                controller.newsService.settings.hideReadArticles !=
-                                    controller.newsService.hasReadArticle(item),
-                            child: ArticleItem(
-                              item: item,
-                              index: controller.newsItems.indexOf(item),
-                              hasRead: controller.newsService.hasReadArticle(item),
-                              onTap: controller.openArticle,
-                              handleOnLongPress: controller.openArticle,
-                              onHandleReturn: controller.scrollToCurrentArticleIndex,
-                            ),
+                          return ArticleItem(
+                            item: item,
+                            index: controller.newsItems.indexOf(item),
+                            hasRead: controller.newsService.hasReadArticle(item),
+                            onTap: controller.openArticle,
+                            handleOnLongPress: controller.openArticle,
+                            onHandleReturn: controller.scrollToCurrentArticleIndex,
                           );
                         }).toList(),
                       ),
@@ -49,18 +44,13 @@ class ArticleList extends GetView<HomeController> {
                         itemBuilder: (context, index) {
                           var item = controller.newsItems[index];
 
-                          return Visibility(
-                            visible: !controller.newsService.settings.hideReadArticles ||
-                                controller.newsService.settings.hideReadArticles !=
-                                    controller.newsService.hasReadArticle(item),
-                            child: ArticleItem(
-                              item: item,
-                              index: controller.newsItems.indexOf(item),
-                              hasRead: controller.newsService.hasReadArticle(item),
-                              onTap: controller.openArticle,
-                              handleOnLongPress: controller.openArticle,
-                              onHandleReturn: controller.scrollToCurrentArticleIndex,
-                            ),
+                          return ArticleItem(
+                            item: item,
+                            index: controller.newsItems.indexOf(item),
+                            hasRead: controller.newsService.hasReadArticle(item),
+                            onTap: controller.openArticle,
+                            handleOnLongPress: controller.openArticle,
+                            onHandleReturn: controller.scrollToCurrentArticleIndex,
                           );
                         }),
                   )

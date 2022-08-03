@@ -73,8 +73,9 @@ class ArticleItem extends GetView<HomeController> {
                           ),
                         ),
                       )
-                    else if (RegExp(r'http://www.nrk.no/video/.*').hasMatch(item.link ?? ""))
-                      const Center()
+                    //TODO: implement video directly in the list
+                    //else if (RegExp(r'http://www.nrk.no/video/.*').hasMatch(item.link ?? ""))
+                    //  const Center()
                     else if (!controller.hasHighEmphasis(item))
                       const SizedBox(
                         width: double.infinity,
@@ -87,11 +88,26 @@ class ArticleItem extends GetView<HomeController> {
                       ),
                     Align(
                       alignment: Alignment.topRight,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(
-                          hasRead ? Icons.remove_red_eye : Icons.remove_red_eye_outlined,
-                          color: hasRead ? Colors.white : Colors.grey,
+                      child: Transform.translate(
+                        offset: const Offset(12.0, -16.0),
+                        child: IconButton(
+                          iconSize: 16.0,
+                          onPressed: () => {
+                            controller.newsService.toggleReadArticle(item),
+                            controller.updateArticleList(),
+                            controller.update()
+                          },
+                          icon: Icon(
+                            hasRead ? Icons.remove_red_eye : Icons.remove_red_eye_outlined,
+                            color: hasRead ? Colors.white : Colors.white54,
+                            shadows: const [
+                              Shadow(
+                                color: Colors.black26,
+                                blurRadius: 3.0,
+                                offset: Offset(0.5, 0.25),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -104,7 +120,7 @@ class ArticleItem extends GetView<HomeController> {
                     children: [
                       if (item.title != null)
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          padding: const EdgeInsets.only(bottom: 8.0),
                           child: Text(
                             item.title ?? '',
                             style: TextStyle(

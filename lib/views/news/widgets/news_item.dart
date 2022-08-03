@@ -35,6 +35,12 @@ class NewsItemState extends State<NewsItem> with AutomaticKeepAliveClientMixin {
     });
   }
 
+  late WebViewController? webViewController;
+
+  Future<void> reloadWebView() {
+    return webViewController!.reload();
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -45,6 +51,9 @@ class NewsItemState extends State<NewsItem> with AutomaticKeepAliveClientMixin {
       children: [
         Expanded(
           child: WebView(
+            onWebViewCreated: (controller) {
+              webViewController = controller;
+            },
             initialUrl: widget.item.link,
             gestureRecognizers: Set()
               ..add(Factory<VerticalDragGestureRecognizer>(() => VerticalDragGestureRecognizer())),

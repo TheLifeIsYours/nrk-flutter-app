@@ -44,6 +44,9 @@ class DrawerNumberInput extends GetView<DrawerNumberInputController> {
                       onTap: controller.decrement,
                       icon: Icons.remove,
                       style: CustomButtonThemes.squarebuttonStyle.copyWith(
+                        backgroundColor: MaterialStateProperty.all(
+                          context.theme.colorScheme.onBackground,
+                        ),
                         shape: MaterialStateProperty.all(
                           const RoundedRectangleBorder(
                             borderRadius: BorderRadius.horizontal(
@@ -64,11 +67,11 @@ class DrawerNumberInput extends GetView<DrawerNumberInputController> {
                     decoration: BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
-                          color: context.theme.colorScheme.primary,
+                          color: context.theme.colorScheme.onBackground,
                           width: 1.0,
                         ),
                         top: BorderSide(
-                          color: context.theme.colorScheme.primary,
+                          color: context.theme.colorScheme.onBackground,
                           width: 1.0,
                         ),
                       ),
@@ -102,6 +105,9 @@ class DrawerNumberInput extends GetView<DrawerNumberInputController> {
                       onTap: controller.increment,
                       icon: Icons.add,
                       style: CustomButtonThemes.squarebuttonStyle.copyWith(
+                        backgroundColor: MaterialStateProperty.all(
+                          context.theme.colorScheme.onBackground,
+                        ),
                         shape: MaterialStateProperty.all(
                           const RoundedRectangleBorder(
                             borderRadius: BorderRadius.horizontal(

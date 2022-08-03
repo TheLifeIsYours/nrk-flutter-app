@@ -43,6 +43,7 @@ class SettingsDrawer extends GetView<SettingsDrawerController> {
                 title: const Text('Enabled'),
                 value: controller.newsService.settings.autoUpdateArticles,
                 onChanged: controller.toggleAutoUpdateArticles,
+                activeColor: context.theme.colorScheme.onBackground,
               ),
               DrawerNumberInput(
                 title: 'Every (Seconds)',
@@ -56,8 +57,9 @@ class SettingsDrawer extends GetView<SettingsDrawerController> {
               ),
               SwitchListTile(
                 title: const Text('Hide'),
-                value: controller.newsService.settings.hideReadArticles,
+                value: controller.newsService.settings.hideReadArticles.value,
                 onChanged: controller.toggleHideReadArticles,
+                activeColor: context.theme.colorScheme.onBackground,
               ),
               const DrawerCaption(
                 'Theme',
@@ -67,6 +69,7 @@ class SettingsDrawer extends GetView<SettingsDrawerController> {
                 title: const Text('Use Dark Theme'),
                 value: controller.newsService.settings.useDarkTheme,
                 onChanged: controller.switchTheme,
+                activeColor: context.theme.colorScheme.onBackground,
               ),
             ],
           ),
