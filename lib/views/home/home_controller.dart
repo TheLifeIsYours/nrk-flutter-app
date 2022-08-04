@@ -5,6 +5,7 @@ import 'package:dual_screen/dual_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nrk/api/nrk/nrk_feed.dart';
+import 'package:nrk/views/home/widgets/reload_dismissible/reload_dismissible.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:webfeed/webfeed.dart';
 import 'package:nrk/api/nrk/nrk_api.dart';
@@ -12,14 +13,13 @@ import 'package:nrk/services/news_service.dart';
 
 class HomeController extends GetxController with GetSingleTickerProviderStateMixin {
   NewsService newsService = Get.find();
-
-  List<RssItem> newsItems = [];
   bool isLoading = true;
 
   final listViewController = ItemScrollController();
   final scrollController = ScrollController();
-
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  Widget? reloadArticlesDismissible;
 
   //Foldable phone states
   bool hasHinge = true;
@@ -57,9 +57,10 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
 
   void updateArticleList() {
     if (newsService.settings.hideReadArticles.value) {
-      newsItems = newsService.articles.where((item) => !newsService.hasReadArticle(item)).toList();
+      newsService.displayedArticles =
+          newsService.articles.where((item) => !newsService.hasReadArticle(item)).toList();
     } else {
-      newsItems = newsService.articles;
+      newsService.displayedArticles = newsService.articles;
     }
 
     update();
@@ -99,9 +100,9 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     });
 
     //Listen for hasNewArticles is true
-    newsService.hasNewArticles.obs.listen((hasNewArticles) {
+    newsService.hasNewArticles.listen((hasNewArticles) {
       if (hasNewArticles) {
-        fetchNrkFeed();
+        reloadArticlesDismissible = const ReloadDismissible();
       }
     });
   }
@@ -131,9 +132,9 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     var feedItems = feed.items ?? [];
 
     //check for new articles
-    if (feedItems.isNotEmpty && newsItems.isNotEmpty) {
-      if (newsItems.first.guid != feedItems.first.guid) {
-        newsService.hasNewArticles = true;
+    if (feedItems.isNotEmpty && newsService.articles.isNotEmpty) {
+      if (newsService.articles.first.guid != feedItems.first.guid) {
+        newsService.hasNewArticles.value = true;
         update();
       }
     }
@@ -159,12 +160,12 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     try {
       rssFeed = await NRKAPI.getNrkFeed(newsService.settings.feed);
       newsService.articles = rssFeed.items ?? [];
-      newsService.hasNewArticles = false;
+      newsService.hasNewArticles.value = false;
       updateArticleList();
     } catch (e) {
       Get.snackbar(
         'Feil',
-        'Kunne ikke hente nyheter',
+        'Kunne ikke hente nyheter, ${e.toString()}',
         icon: const Icon(
           Icons.error,
           color: Colors.white,

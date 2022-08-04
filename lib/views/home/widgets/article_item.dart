@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nrk/app_theme.dart';
 import 'package:nrk/views/home/home_controller.dart';
+import 'package:nrk/widgets/nrk_progressIndicator/nrk_progressindicator.dart';
 import 'package:webfeed/domain/rss_item.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -64,7 +65,11 @@ class ArticleItem extends GetView<HomeController> {
                             placeholder: (context, url) => const Center(
                               child: Padding(
                                 padding: EdgeInsets.symmetric(vertical: 16.0),
-                                child: CircularProgressIndicator(),
+                                child: NrkProgressindicator(
+                                  height: 48.0,
+                                  switchDuration: Duration(milliseconds: 700),
+                                  transitionDuration: Duration(milliseconds: 200),
+                                ),
                               ),
                             ),
                             errorWidget: (context, url, error) => const Icon(Icons.error),
@@ -163,7 +168,11 @@ class ArticleItem extends GetView<HomeController> {
                   placeholder: (context, url) => const Center(
                     child: Padding(
                       padding: EdgeInsets.symmetric(vertical: 48.0),
-                      child: CircularProgressIndicator(),
+                      child: NrkProgressindicator(
+                        height: 80.0,
+                        switchDuration: Duration(milliseconds: 700),
+                        transitionDuration: Duration(milliseconds: 200),
+                      ),
                     ),
                   ),
                   errorWidget: (context, url, error) => const Icon(Icons.error),

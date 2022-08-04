@@ -48,7 +48,7 @@ class AppTheme {
       onPrimary: Colors.white,
       onSecondary: Colors.black,
       onSurface: Colors.white,
-      onBackground: purple,
+      onBackground: blue,
       onError: pink,
       brightness: Brightness.dark,
     ),

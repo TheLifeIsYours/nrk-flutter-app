@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:nrk/widgets/nrk_progressIndicator/nrk_progressindicator.dart';
 import 'package:webfeed/domain/rss_item.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -32,6 +33,7 @@ class NewsItemState extends State<NewsItem> with AutomaticKeepAliveClientMixin {
   }
 
   late WebViewController? webViewController;
+  bool isLoading = true;
 
   Future<void> reloadWebView() => webViewController!.reload();
 
@@ -44,15 +46,30 @@ class NewsItemState extends State<NewsItem> with AutomaticKeepAliveClientMixin {
       mainAxisSize: MainAxisSize.min,
       children: [
         Expanded(
-          child: WebView(
-            javascriptMode: JavascriptMode.unrestricted,
-            onWebViewCreated: (controller) {
-              webViewController = controller;
-            },
-            initialUrl: widget.item.link,
-            gestureRecognizers: <Factory<VerticalDragGestureRecognizer>>{
-              Factory<VerticalDragGestureRecognizer>(() => VerticalDragGestureRecognizer())
-            },
+          child: Stack(
+            children: [
+              WebView(
+                javascriptMode: JavascriptMode.unrestricted,
+                onWebViewCreated: (controller) {
+                  webViewController = controller;
+                },
+                onProgress: (progress) {
+                  setState(() {
+                    isLoading = progress < 70;
+                  });
+                },
+                initialUrl: widget.item.link,
+                gestureRecognizers: <Factory<VerticalDragGestureRecognizer>>{
+                  Factory<VerticalDragGestureRecognizer>(() => VerticalDragGestureRecognizer())
+                },
+              ),
+              if (isLoading)
+                const NrkProgressindicator(
+                  height: 80.0,
+                  switchDuration: Duration(milliseconds: 700),
+                  transitionDuration: Duration(milliseconds: 200),
+                )
+            ],
           ),
         ),
       ],

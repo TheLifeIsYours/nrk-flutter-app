@@ -9,9 +9,11 @@ class NewsService extends GetxService {
   late Settings settings;
 
   List<RssItem> articles = [];
+  List<RssItem> displayedArticles = [];
+
   String currentArticleUrl = "";
   int currentArticleIndex = 0;
-  bool hasNewArticles = false;
+  RxBool hasNewArticles = false.obs;
 
   @override
   void onInit() async {
@@ -49,7 +51,9 @@ class NewsService extends GetxService {
     if (settingsData != null) {
       settings = Settings.fromJson(settingsData);
     } else {
-      settings = Settings();
+      settings = Settings()
+        ..hideReadArticles = RxBool(false)
+        ..readArticles = <String>{};
     }
   }
 

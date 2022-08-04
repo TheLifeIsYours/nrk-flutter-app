@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nrk/views/home/home_controller.dart';
 import 'package:nrk/views/home/widgets/article_item.dart';
+import 'package:nrk/widgets/nrk_progressIndicator/nrk_progressindicator.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
@@ -13,7 +14,7 @@ class ArticleList extends GetView<HomeController> {
     return GetBuilder(
       init: HomeController(),
       builder: (_) {
-        return controller.newsItems.isNotEmpty
+        return controller.newsService.displayedArticles.isNotEmpty
             ? controller.newsService.settings.displayCompactList
                 ? SliverToBoxAdapter(
                     child: AnimatedContainer(
@@ -21,10 +22,10 @@ class ArticleList extends GetView<HomeController> {
                       curve: Curves.easeIn,
                       child: StaggeredGrid.count(
                         crossAxisCount: 2,
-                        children: controller.newsItems.map((item) {
+                        children: controller.newsService.displayedArticles.map((item) {
                           return ArticleItem(
                             item: item,
-                            index: controller.newsItems.indexOf(item),
+                            index: controller.newsService.displayedArticles.indexOf(item),
                             hasRead: controller.newsService.hasReadArticle(item),
                             onTap: controller.openArticle,
                             handleOnLongPress: controller.openArticle,
@@ -39,14 +40,14 @@ class ArticleList extends GetView<HomeController> {
                         shrinkWrap: true,
                         addAutomaticKeepAlives: true,
                         itemScrollController: controller.listViewController,
-                        itemCount: controller.newsItems.length,
+                        itemCount: controller.newsService.displayedArticles.length,
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
                         itemBuilder: (context, index) {
-                          var item = controller.newsItems[index];
+                          var item = controller.newsService.displayedArticles[index];
 
                           return ArticleItem(
                             item: item,
-                            index: controller.newsItems.indexOf(item),
+                            index: controller.newsService.displayedArticles.indexOf(item),
                             hasRead: controller.newsService.hasReadArticle(item),
                             onTap: controller.openArticle,
                             handleOnLongPress: controller.openArticle,
@@ -55,14 +56,43 @@ class ArticleList extends GetView<HomeController> {
                         }),
                   )
             : !controller.isLoading
-                ? const SliverFillRemaining(
+                ? SliverFillRemaining(
                     child: Center(
-                      child: Text('No news items'),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          const Text(
+                            'Ingen flere nyheter',
+                            style: TextStyle(
+                              fontSize: 24.0,
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                'Vis gjømte nyheter:',
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                              Switch(
+                                value: !controller.newsService.settings.hideReadArticles.value,
+                                onChanged: (value) =>
+                                    controller.newsService.settings.hideReadArticles.value = !value,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   )
                 : const SliverFillRemaining(
-                    child: Center(
-                      child: CircularProgressIndicator(),
+                    child: NrkProgressindicator(
+                      height: 100.0,
+                      switchDuration: Duration(milliseconds: 700),
+                      transitionDuration: Duration(milliseconds: 200),
                     ),
                   );
       },

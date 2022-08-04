@@ -30,20 +30,25 @@ class Settings {
       NRKFeed.dokumentar,
       NRKFeed.ytring,
     ],
-    this.readArticles = const <String>{},
+    Set<String>? readArticles,
     Rx<bool>? hideReadArticles,
   });
 
-  factory Settings.fromJson(Map<String, dynamic> json) => Settings(
-        feed: NRKFeed.values[json['feed'] ?? 0],
-        autoUpdateArticles: json['autoUpdateArticles'] ?? false,
-        autoUpdateArticlesIntervalSeconds: json['updateTimerIntervalSeconds'] ?? 60,
-        displayCompactList: json['displayCompactList'] ?? false,
-        useDarkTheme: json['useDarkTheme'] ?? false,
-        feedOrder: List<NRKFeed>.from(
-            json['feedOrder'] != null ? json['feedOrder'].map((x) => NRKFeed.values[x]).toList() : []),
-        readArticles: Set<String>.from(json['readArticles'] ?? []),
-      )..hideReadArticles = RxBool(json['hideReadArticles'] ?? false);
+  factory Settings.fromJson(Map<String, dynamic> json) {
+    var settings = Settings(
+      feed: NRKFeed.values[json['feed'] ?? 0],
+      autoUpdateArticles: json['autoUpdateArticles'] ?? false,
+      autoUpdateArticlesIntervalSeconds: json['updateTimerIntervalSeconds'] ?? 60,
+      displayCompactList: json['displayCompactList'] ?? false,
+      useDarkTheme: json['useDarkTheme'] ?? false,
+      feedOrder: List<NRKFeed>.from(
+          json['feedOrder'] != null ? json['feedOrder'].map((x) => NRKFeed.values[x]).toList() : []),
+    )
+      ..hideReadArticles = RxBool(json['hideReadArticles'] ?? false)
+      ..readArticles = Set<String>.from(json['readArticles'] ?? []);
+
+    return settings;
+  }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};

@@ -4,6 +4,7 @@ import 'package:nrk/views/home/home_controller.dart';
 import 'package:nrk/views/fold/fold_view.dart';
 import 'package:nrk/widgets/main_drawer/main_drawer.dart';
 import 'package:nrk/views/home/widgets/article_list.dart';
+import 'package:nrk/widgets/nrk_progressIndicator/nrk_progressindicator.dart';
 import 'package:nrk/widgets/settings_drawer/settings_drawer.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -22,47 +23,7 @@ class HomeView extends GetView<HomeController> {
           endDrawer: const SettingsDrawer(),
           endDrawerEnableOpenDragGesture: true,
           floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
-          floatingActionButton: (controller.newsService.hasNewArticles
-              ? Padding(
-                  padding: const EdgeInsets.only(top: 100.0),
-                  child: Dismissible(
-                    key: const Key('has_new_articles'),
-                    onDismissed: (direction) => controller.newsService.hasNewArticles = false,
-                    child: TextButton(
-                      onPressed: controller.fetchNrkFeed,
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(context.theme.colorScheme.primary),
-                        minimumSize: MaterialStateProperty.all(Size.zero),
-                        fixedSize: MaterialStateProperty.all(const Size(120, 40)),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: const [
-                          Icon(
-                            Icons.refresh,
-                            color: Colors.white,
-                          ),
-                          SizedBox(width: 8.0),
-                          Text(
-                            'Refresh',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                )
-              : null),
+          floatingActionButton: controller.reloadArticlesDismissible,
           body: RefreshIndicator(
             onRefresh: controller.fetchNrkFeed,
             backgroundColor: context.theme.colorScheme.primary,
@@ -134,10 +95,12 @@ class HomeView extends GetView<HomeController> {
                         ),
                       ],
                     ),
-                    if (controller.newsItems.isEmpty || controller.isLoading)
+                    if (controller.newsService.displayedArticles.isEmpty && controller.isLoading)
                       const SliverFillRemaining(
-                        child: Center(
-                          child: CircularProgressIndicator(),
+                        child: NrkProgressindicator(
+                          height: 100.0,
+                          switchDuration: Duration(milliseconds: 700),
+                          transitionDuration: Duration(milliseconds: 200),
                         ),
                       )
                     else
