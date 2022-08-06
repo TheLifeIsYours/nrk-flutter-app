@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:nrk/app_theme.dart';
 import 'package:nrk/services/settings.dart';
+import 'package:nrk/services/subscriptions.dart';
 import 'package:webfeed/webfeed.dart';
 
 class NewsService extends GetxService {
@@ -20,6 +21,13 @@ class NewsService extends GetxService {
     super.onInit();
     await loadSettings();
     Get.changeTheme(settings.useDarkTheme ? AppTheme.dark : AppTheme.light);
+
+    hasNewArticles.listen((_) {
+      if (hasNewArticles.value) {
+        //Check for subscriptions
+        checkForSubscribedArticles();
+      }
+    });
   }
 
   void toggleDisplayCompactList() {
@@ -43,6 +51,31 @@ class NewsService extends GetxService {
       settings.readArticles.add(item.guid!);
     }
     saveSettings();
+  }
+
+  void toggleSubscription(Set<RssCategory> category) {
+    var subscription = Subscription(category: category);
+
+    settings.subscriptions.contains(subscription)
+        ? settings.subscriptions.remove(subscription)
+        : settings.subscriptions.add(subscription);
+    saveSettings();
+  }
+
+  void checkForSubscribedArticles() {
+    var subscriptions = settings.subscriptions.toList();
+
+    for (var article in articles) {
+      var categories = article.categories;
+
+      if (categories != null) {
+        for (var subscription in subscriptions) {
+          if (subscription.category.containsAll(categories)) {}
+        }
+      }
+    }
+
+    hasNewArticles.value = false;
   }
 
   Future<void> loadSettings() async {

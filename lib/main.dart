@@ -1,9 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:nrk/app_routes.dart';
 import 'package:nrk/app_theme.dart';
 import 'package:nrk/services/news_service.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:nrk/services/notifications_service.dart';
 
 void main() async {
   await GetStorage.init();
@@ -22,6 +25,7 @@ class MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     Get.put(NewsService());
+    Get.put(NotificationsService());
   }
 
   @override

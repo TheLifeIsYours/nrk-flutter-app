@@ -43,6 +43,7 @@ dependencies:
   get_storage: ^2.0.3
   dual_screen: ^1.0.3
   flutter_staggered_grid_view: ^0.6.2
+  flutter_local_notifications: ^9.1.4
 
 dev_dependencies:
   flutter_test:

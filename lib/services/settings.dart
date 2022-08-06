@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 import 'package:nrk/api/nrk/nrk_feed.dart';
+import 'package:nrk/services/subscriptions.dart';
+import 'package:webfeed/webfeed.dart';
 
 class Settings {
   late NRKFeed feed;
@@ -8,6 +10,7 @@ class Settings {
   late bool displayCompactList;
   late bool useDarkTheme;
   late List<NRKFeed> feedOrder;
+  late Set<Subscription> subscriptions;
   late Set<String> readArticles;
   late Rx<bool> hideReadArticles;
 
@@ -30,6 +33,7 @@ class Settings {
       NRKFeed.dokumentar,
       NRKFeed.ytring,
     ],
+    Set<Subscription>? subscriptions,
     Set<String>? readArticles,
     Rx<bool>? hideReadArticles,
   });
@@ -44,8 +48,9 @@ class Settings {
       feedOrder: List<NRKFeed>.from(
           json['feedOrder'] != null ? json['feedOrder'].map((x) => NRKFeed.values[x]).toList() : []),
     )
-      ..hideReadArticles = RxBool(json['hideReadArticles'] ?? false)
-      ..readArticles = Set<String>.from(json['readArticles'] ?? []);
+      ..subscriptions = Set<Subscription>.from(json['subscriptions'] ?? [])
+      ..readArticles = Set<String>.from(json['readArticles'] ?? [])
+      ..hideReadArticles = RxBool(json['hideReadArticles'] ?? false);
 
     return settings;
   }
@@ -56,10 +61,11 @@ class Settings {
     data['autoUpdateArticles'] = autoUpdateArticles;
     data['autoUpdateArticlesIntervalSeconds'] = autoUpdateArticlesIntervalSeconds;
     data['displayCompactList'] = displayCompactList;
-    data['hideReadArticles'] = hideReadArticles.value;
     data['useDarkTheme'] = useDarkTheme;
     data['feedOrder'] = feedOrder.map((x) => x.index).toList();
+    data['subscriptions'] = subscriptions.toList();
     data['readArticles'] = readArticles.toList();
+    data['hideReadArticles'] = hideReadArticles.value;
     return data;
   }
 }

@@ -161,6 +161,7 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
       rssFeed = await NRKAPI.getNrkFeed(newsService.settings.feed);
       newsService.articles = rssFeed.items ?? [];
       newsService.hasNewArticles.value = false;
+      reloadArticlesDismissible = null;
       updateArticleList();
     } catch (e) {
       Get.snackbar(
