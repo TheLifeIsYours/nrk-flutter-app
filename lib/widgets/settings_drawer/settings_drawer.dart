@@ -62,6 +62,16 @@ class SettingsDrawer extends GetView<SettingsDrawerController> {
                 activeColor: context.theme.colorScheme.onBackground,
               ),
               const DrawerCaption(
+                'Enable Folded View',
+                divider: true,
+              ),
+              SwitchListTile(
+                title: const Text('Enabled'),
+                value: controller.newsService.settings.foldViewEnabled.value,
+                onChanged: controller.toggleFoldView,
+                activeColor: context.theme.colorScheme.onBackground,
+              ),
+              const DrawerCaption(
                 'Theme',
                 divider: true,
               ),

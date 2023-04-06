@@ -13,6 +13,7 @@ class Settings {
   late Set<Subscription> subscriptions;
   late Set<String> readArticles;
   late Rx<bool> hideReadArticles;
+  late Rx<bool> foldViewEnabled;
 
   Settings({
     this.feed = NRKFeed.innenriksMyheter,
@@ -36,6 +37,7 @@ class Settings {
     Set<Subscription>? subscriptions,
     Set<String>? readArticles,
     Rx<bool>? hideReadArticles,
+    Rx<bool>? foldViewEnabled,
   });
 
   factory Settings.fromJson(Map<String, dynamic> json) {
@@ -50,7 +52,8 @@ class Settings {
     )
       ..subscriptions = Set<Subscription>.from(json['subscriptions'] ?? [])
       ..readArticles = Set<String>.from(json['readArticles'] ?? [])
-      ..hideReadArticles = RxBool(json['hideReadArticles'] ?? false);
+      ..hideReadArticles = RxBool(json['hideReadArticles'] ?? false)
+      ..foldViewEnabled = RxBool(json['foldViewEnabled'] ?? false);
 
     return settings;
   }
@@ -66,6 +69,7 @@ class Settings {
     data['subscriptions'] = subscriptions.toList();
     data['readArticles'] = readArticles.toList();
     data['hideReadArticles'] = hideReadArticles.value;
+    data['foldViewEnabled'] = foldViewEnabled.value;
     return data;
   }
 }

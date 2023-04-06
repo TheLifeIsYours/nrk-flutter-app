@@ -25,6 +25,7 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
   bool hasHinge = true;
   bool previusFoldedOpen = true;
   bool isFoldedOpen = true;
+  bool foldViewEnabled = false;
 
   Timer? autoUpdateArticlesTimer;
 
@@ -73,6 +74,11 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
   }
 
   void initDualScreen() {
+    newsService.settings.foldViewEnabled.listen((foldViewEnabled) {
+      this.foldViewEnabled = foldViewEnabled;
+      update();
+    });
+
     DualScreenInfo.hingeAngleEvents.listen((double hingeAngle) {
       isFoldedOpen = (hingeAngle > 0);
 

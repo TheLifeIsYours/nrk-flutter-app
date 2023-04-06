@@ -26,6 +26,13 @@ class SettingsDrawerController extends GetxController {
     update();
   }
 
+  void toggleFoldView(bool value) {
+    newsService.settings.foldViewEnabled.value = value;
+    newsService.saveSettings();
+    homeController.update();
+    update();
+  }
+
   void switchTheme(bool value) {
     Get.changeTheme(value ? AppTheme.dark : AppTheme.light);
     newsService.settings.useDarkTheme = value;

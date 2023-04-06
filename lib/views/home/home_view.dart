@@ -103,7 +103,7 @@ class HomeView extends GetView<HomeController> {
                       )
                     else
                       Visibility(
-                        visible: controller.hasHinge && controller.isFoldedOpen,
+                        visible: controller.hasHinge && controller.isFoldedOpen && controller.foldViewEnabled,
                         replacement: const SliverFillRemaining(child: ArticleList()),
                         child: const SliverFillRemaining(child: FoldView()),
                       ),
