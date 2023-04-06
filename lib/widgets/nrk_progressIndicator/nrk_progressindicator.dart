@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nrk/widgets/nrk_progressIndicator/nrk_progressindicator_controller.dart';
 
-class NrkProgressindicator extends GetView<NrkProgressindicatorController> {
+class NrkProgressIndicator extends GetView<NrkProgressindicatorController> {
   final double? height;
   final Duration? switchDuration;
   final Duration? transitionDuration;
 
-  const NrkProgressindicator({
+  const NrkProgressIndicator({
     Key? key,
     this.height,
     this.switchDuration,

@@ -10,7 +10,8 @@ class FoldController extends GetxController {
   PageController pageController = PageController();
   final listViewController = ItemScrollController();
   List<NewsItem> webViews = [];
-  late void Function(int index) upadteKeepAlive;
+
+  late void Function(int index) updateKeepAlive;
 
   @override
   void onInit() {
@@ -26,7 +27,7 @@ class FoldController extends GetxController {
   }
 
   void onPageChanged(int index) {
-    upadteKeepAlive.call(index);
+    updateKeepAlive.call(index);
     newsService.currentArticleIndex = index;
     scrollToCurrentArticleIndex();
     update();
@@ -46,7 +47,7 @@ class FoldController extends GetxController {
         item: item,
         index: newsService.articles.indexOf(item),
         builder: (BuildContext context, void Function(int index) setKeepAlive) {
-          upadteKeepAlive = setKeepAlive;
+          updateKeepAlive = setKeepAlive;
         },
       );
     }).toList();

@@ -32,15 +32,25 @@ class NewsItemState extends State<NewsItem> with AutomaticKeepAliveClientMixin {
     });
   }
 
-  late WebViewController? webViewController;
   bool isLoading = true;
-
-  Future<void> reloadWebView() => webViewController!.reload();
+  void handleOnProgress(int progress) {
+    if (progress > 70) {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
     widget.builder.call(context, (int index) => setKeepAlive);
+
+    WebViewController webViewController = WebViewController()
+      ..setNavigationDelegate(NavigationDelegate(onProgress: handleOnProgress))
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(Colors.transparent)
+      ..loadRequest(Uri.parse(widget.item.link ?? ""));
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -48,23 +58,15 @@ class NewsItemState extends State<NewsItem> with AutomaticKeepAliveClientMixin {
         Expanded(
           child: Stack(
             children: [
-              WebView(
-                javascriptMode: JavascriptMode.unrestricted,
-                onWebViewCreated: (controller) {
-                  webViewController = controller;
-                },
-                onProgress: (progress) {
-                  setState(() {
-                    isLoading = progress < 70;
-                  });
-                },
-                initialUrl: widget.item.link,
+              WebViewWidget(
+                key: ValueKey(widget.item.link),
+                controller: webViewController,
                 gestureRecognizers: <Factory<VerticalDragGestureRecognizer>>{
                   Factory<VerticalDragGestureRecognizer>(() => VerticalDragGestureRecognizer())
                 },
               ),
               if (isLoading)
-                const NrkProgressindicator(
+                const NrkProgressIndicator(
                   height: 80.0,
                   switchDuration: Duration(milliseconds: 700),
                   transitionDuration: Duration(milliseconds: 200),

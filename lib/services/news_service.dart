@@ -86,6 +86,7 @@ class NewsService extends GetxService {
     } else {
       settings = Settings()
         ..hideReadArticles = RxBool(false)
+        ..subscriptions = <Subscription>{}
         ..readArticles = <String>{};
     }
   }

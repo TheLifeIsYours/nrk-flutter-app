@@ -27,7 +27,10 @@ class NrkProgressindicatorController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-    switchTimer.cancel();
+
+    if (switchTimer.isActive) {
+      switchTimer.cancel();
+    }
   }
 
   Future initImageAssets() async {

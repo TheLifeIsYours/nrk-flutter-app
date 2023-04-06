@@ -17,9 +17,7 @@ class HomeView extends GetView<HomeController> {
       builder: (controller) {
         return Scaffold(
           key: controller.scaffoldKey,
-          drawer: MainDrawer(
-            scaffoldKey: controller.scaffoldKey,
-          ),
+          drawer: MainDrawer(),
           endDrawer: const SettingsDrawer(),
           endDrawerEnableOpenDragGesture: true,
           floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
@@ -97,7 +95,7 @@ class HomeView extends GetView<HomeController> {
                     ),
                     if (controller.newsService.displayedArticles.isEmpty && controller.isLoading)
                       const SliverFillRemaining(
-                        child: NrkProgressindicator(
+                        child: NrkProgressIndicator(
                           height: 100.0,
                           switchDuration: Duration(milliseconds: 700),
                           transitionDuration: Duration(milliseconds: 200),
@@ -106,8 +104,8 @@ class HomeView extends GetView<HomeController> {
                     else
                       Visibility(
                         visible: controller.hasHinge && controller.isFoldedOpen,
-                        replacement: const ArticleList(),
-                        child: const FoldView(),
+                        replacement: const SliverFillRemaining(child: ArticleList()),
+                        child: const SliverFillRemaining(child: FoldView()),
                       ),
                   ],
                 ),

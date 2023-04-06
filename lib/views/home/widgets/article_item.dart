@@ -55,17 +55,17 @@ class ArticleItem extends GetView<HomeController> {
                           ),
                         ),
                       ),
-                    if (image != "")
+                    if (image != null && image.isNotEmpty)
                       GestureDetector(
                         onDoubleTap: () => interactiveImageView(image),
                         child: Hero(
                           tag: '$image$index',
                           child: CachedNetworkImage(
-                            imageUrl: image!,
+                            imageUrl: image,
                             placeholder: (context, url) => const Center(
                               child: Padding(
                                 padding: EdgeInsets.symmetric(vertical: 16.0),
-                                child: NrkProgressindicator(
+                                child: NrkProgressIndicator(
                                   height: 48.0,
                                   switchDuration: Duration(milliseconds: 700),
                                   transitionDuration: Duration(milliseconds: 200),
@@ -168,7 +168,7 @@ class ArticleItem extends GetView<HomeController> {
                   placeholder: (context, url) => const Center(
                     child: Padding(
                       padding: EdgeInsets.symmetric(vertical: 48.0),
-                      child: NrkProgressindicator(
+                      child: NrkProgressIndicator(
                         height: 80.0,
                         switchDuration: Duration(milliseconds: 700),
                         transitionDuration: Duration(milliseconds: 200),

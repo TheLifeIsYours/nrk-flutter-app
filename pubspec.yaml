@@ -37,7 +37,7 @@ dependencies:
   webfeed: ^0.7.0
   http: ^0.13.4
   get: ^4.6.5
-  webview_flutter: ^3.0.4
+  webview_flutter: ^4.0.7
   cached_network_image: ^3.2.1
   scrollable_positioned_list: ^0.3.2
   get_storage: ^2.0.3

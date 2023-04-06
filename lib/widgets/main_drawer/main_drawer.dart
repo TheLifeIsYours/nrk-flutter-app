@@ -4,17 +4,12 @@ import 'package:nrk/app_theme.dart';
 import 'package:nrk/widgets/main_drawer/main_drawer_controller.dart';
 
 class MainDrawer extends GetView<MainDrawerController> {
-  final GlobalKey<ScaffoldState> scaffoldKey;
-
-  const MainDrawer({
-    Key? key,
-    required this.scaffoldKey,
-  }) : super(key: key);
+  const MainDrawer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<MainDrawerController>(
-      init: MainDrawerController(scaffoldKey: scaffoldKey),
+      init: MainDrawerController(),
       builder: (controller) {
         return Drawer(
           child: ListView(

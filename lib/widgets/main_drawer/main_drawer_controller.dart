@@ -7,26 +7,21 @@ import 'package:nrk/views/home/home_controller.dart';
 class MainDrawerController extends GetxController {
   NewsService newsService = Get.find();
   HomeController homeController = Get.find();
-  GlobalKey<ScaffoldState> scaffoldKey;
-
-  MainDrawerController({
-    required this.scaffoldKey,
-  });
 
   void openDrawer() {
-    scaffoldKey.currentState?.openDrawer();
+    homeController.scaffoldKey.currentState?.openDrawer();
   }
 
   void closeDrawer() {
-    scaffoldKey.currentState?.closeDrawer();
+    homeController.scaffoldKey.currentState?.closeDrawer();
   }
 
   void openEndDrawer() {
-    scaffoldKey.currentState?.openEndDrawer();
+    homeController.scaffoldKey.currentState?.openEndDrawer();
   }
 
   void closeEndDrawer() {
-    scaffoldKey.currentState?.closeEndDrawer();
+    homeController.scaffoldKey.currentState?.closeEndDrawer();
   }
 
   void reorderFeedOrder(oldIndex, newIndex) {

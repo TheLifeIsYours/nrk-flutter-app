@@ -15,8 +15,7 @@ class NotificationsService extends GetxService {
 
   void initNotifications() async {
     const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('app_icon');
-    final IOSInitializationSettings initializationSettingsIOS =
-        IOSInitializationSettings(onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+    final IOSInitializationSettings initializationSettingsIOS = IOSInitializationSettings(onDidReceiveLocalNotification: onDidReceiveLocalNotification);
     const MacOSInitializationSettings initializationSettingsMacOS = MacOSInitializationSettings();
 
     final InitializationSettings initializationSettings = InitializationSettings(
